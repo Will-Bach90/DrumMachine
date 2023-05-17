@@ -12,5 +12,5 @@
 * *     |     (h)  (i)  (j)  (k)  (l)  (m)  (n)  (o)    |  <------> Closed Hi-Hat
 * *     |     (p)  (q)  (r)  (s)  (t)  (u)  (v)  (w)    |  <------> Open Hi-Hat
 ## Next
-* Integrating web interface to set pattern and communicate with uno over serial via bluetooth (ESP32)
+* Integrating web interface to set pattern and communicate with uno over serial via bluetooth module (ESP32)
 * ...
