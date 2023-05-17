@@ -1,0 +1,51 @@
+        /* .progress {
+            height:30px;
+        }
+        .bg-info {
+            background-color: rgb(5, 224, 252, 0.7) !important;
+        } */
+        .btn {
+            color: white !important;
+            border-color: white !important;
+            width: 130px;
+            margin: 10px;
+            padding: 12px;
+        }
+
+        .lines {
+            width: 40px;
+        }
+        .lines:hover {
+            background-color: lightseagreen;
+        }
+        .lines-pressed{
+            background-color: lightseagreen !important;
+        }
+
+        .bass:hover {
+            background-color: rgb(5, 224, 252, 0.7);
+        }
+        .bass-pressed {
+            background-color: rgb(5, 224, 252, 0.7) !important;
+        }
+
+        .snare:hover {
+            background-color: rgb(127,255,122, 0.8);
+        }
+        .snare-pressed {
+            background-color: rgb(127,255,122, 0.8) !important;
+        }
+
+        .open:hover {
+            background-color: indianred;
+        }
+        .open-pressed {
+            background-color: indianred !important;
+        }
+
+        .close:hover {
+            background-color: rgba(255, 187, 98, 0.9);
+        }
+        .close-pressed {
+            background-color: rgba(255, 187, 98, 0.9) !important;
+        }
