@@ -2,7 +2,7 @@
 //  https://diyelectromusic.wordpress.com/2021/06/23/arduino-mozzi-sample-drum-sequencer/
 #include <MozziGuts.h>
 #include <Sample.h>
-#include "d_kit.h"
+#include "DrumSounds.h"
 
 #define OUTPUTSCALING 9 // 10 bit scaling factor
 
