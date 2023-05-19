@@ -2,7 +2,7 @@
 //  https://diyelectromusic.wordpress.com/2021/06/23/arduino-mozzi-sample-drum-sequencer/
 #include <MozziGuts.h>
 #include <Sample.h>
-#include "DrumSounds.h"
+#include "d_kit.h"
 
 #define OUTPUTSCALING 9 // 10 bit scaling factor
 
@@ -81,6 +81,8 @@ void setup () {
   Serial.begin(115200);  // uses serial to set pattern
 }
 
+void(* resetFunction) (void) = 0; //declare reset function @ address 0
+
 void updateControl() {
   // ledOff();
 
@@ -133,12 +135,14 @@ void updateControl() {
           pattern[beat][drum] = drums[drum]; // otherwise turn on (1-4 for the different drum types)
           lightsOn++;
         } 
-      } 
+      } else if(ch == '1') {
+        resetFunction();
+      }
     }
   } else {
     int newTempo = 50 + (mozziAnalogRead (tempoPotentiometer) >> 2);
     if (newTempo != tempo) {
-        tempo = newTempo;  // Tempo range is 20 to 305.
+        tempo = newTempo;  // Tempo range is 50 to 305.
     }
   }
   loopPattern++;
