@@ -4,7 +4,7 @@ const serviceUUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const charUUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 let connected = false;
 
-button.on("click", function() {
+button.on("mousedown", function() {
   if(!connected) {
     connect();
   } else {
@@ -188,7 +188,7 @@ const keyCodes = ['X', 'Y', 'Z', '[', '\\', ']', '^', '_',
                   'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
                   'p', 'q', 'r', 's', 't', 'u', 'v', 'w'];
 for(var i = 0; i < 32; i++){
-    document.querySelectorAll(".lines")[i].addEventListener("click", function() {
+    document.querySelectorAll(".lines")[i].addEventListener("mousedown", function() {
       var n = parseInt($(this).attr("id")) - 1;
       if(!buttons[n]) {
           $(this).addClass("lines-pressed");
