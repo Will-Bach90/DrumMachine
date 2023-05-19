@@ -1,9 +1,28 @@
 .btn {
     color: white !important;
     border-color: white !important;
-    width: 130px;
     margin: 10px;
-    padding: 12px;
+}
+
+.r1 {
+    border: 8px solid rgb(5, 224, 252, 0.5);
+    background-color: rgb(5, 224, 252, 0.5);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.r2 {
+    border: 8px solid rgb(127,255,122, 0.5);
+    background-color: rgb(127,255,122, 0.5);
+}
+.r3 {
+    border: 8px solid rgb(205, 92, 92, 0.5);
+    background-color: rgb(205, 92, 92, 0.5);
+}
+.r4 {
+    border: 8px solid rgb(255, 187, 98, 0.5);
+    background-color: rgb(255, 187, 98, 0.5);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 #connectionStatus {
@@ -18,8 +37,11 @@
 
 .lines {
     width: 40px;
-    margin-left: -14px !important;
-}
+    margin: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /* margin-left: -14px !important; */
+} 
 .lines:hover {
     background-color: lightseagreen;
 }
@@ -27,6 +49,9 @@
     background-color: lightseagreen !important;
 }
 
+.bass {
+    width: 130px;
+}
 .bass:hover {
     background-color: rgb(5, 224, 252, 0.7);
 }
@@ -34,6 +59,10 @@
     background-color: rgb(5, 224, 252, 0.7) !important;
 }
 
+/* Snare Drum buttons */
+.snare {
+    width: 130px;
+}
 .snare:hover {
     background-color: rgb(127,255,122, 0.8);
 }
@@ -41,6 +70,9 @@
     background-color: rgb(127,255,122, 0.8) !important;
 }
 
+.open {
+    width: 130px;
+}
 .open:hover {
     background-color: indianred;
 }
@@ -48,6 +80,9 @@
     background-color: indianred !important;
 }
 
+.close {
+    width: 130px;
+}
 .close:hover {
     background-color: rgba(255, 187, 98, 0.9);
 }
