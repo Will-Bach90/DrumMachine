@@ -5,16 +5,17 @@ const charUUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 let connected = false;
 
 button.on("click", function() {
-  if(!connected)
-  {
+  if(!connected) {
     connect();
   } else {
     disconnect();
+    connected = false;
   }
 });
 
 let deviceCache = null;
 let characteristicCache = null;
+let readBuffer = '';
 
 function connect() {
   return(deviceCache ? Promise.resolve(deviceCache) : 
@@ -24,9 +25,13 @@ function connect() {
         bleStatus.text("CONNECTED");
         connected = true;
       }).
+      then(characteristic => {
+        startNotification(characteristic);
+      }).
       catch(error => {
-        bleStatus.text("IDLE");
+        bleStatus.text("FAILED");
         connected = false;
+        console.log(error);
       });
 }
 
@@ -36,8 +41,9 @@ function requestBluetoothDevice() {
     optionalServices: [serviceUUID, charUUID],
   }).
       then(device => {
+        console.log('"' + device.name + '" bluetooth device selected');
         deviceCache = device;
-        deviceCache.addEventListener('gattserverdisconnected',
+        deviceCache.addEventListener("gattserverdisconnected",
           handleDisconnection);
           return deviceCache;
       });
@@ -46,12 +52,38 @@ function requestBluetoothDevice() {
 function handleDisconnection(event) {
   let device = event.target;
 
+  console.log('"' + device.name +
+      '" bluetooth device disconnected, trying to reconnect...');
+
   connectDeviceAndCache(device).
+    then(characteristic => startNotification(characteristic)).
     catch(error => {
-      bleStatus.text("IDLE");
+      bleStatus.text("FAILED");
       connected = false;
-      log(error);
+      console.log(error);
     });
+}
+
+function handleCharacteristicValueChanged(event) {
+  let value = new TextDecoder().decode(event.target.value);
+
+  for (let c of value) {
+    if (c === '\n') {
+      let data = readBuffer.trim();
+      readBuffer = '';
+
+      if (data) {
+        receive(data);
+      }
+    }
+    else {
+      readBuffer += c;
+    }
+  }
+}
+
+function receive(data) {
+  console.log(data);
 }
 
 function connectDeviceAndCache(device) {
@@ -59,26 +91,52 @@ function connectDeviceAndCache(device) {
     return Promise.resolve(characteristicCache);
   }
 
+  console.log('Connecting to GATT server...');
+
   return device.gatt.connect().
     then(server => {
+      console.log('GATT server connected, getting service...');
       return server.getPrimaryService(serviceUUID);
     }).
     then(service => {
+      console.log('Service found, getting characteristic...');
       return service.getCharacteristic(charUUID);
     }).
     then(characteristic => {
+      console.log('Characteristic found');
       characteristicCache = characteristic;
-      alert(characteristicCache);
       return characteristicCache;
     });
 }
 
+function startNotification(characteristic) {
+  console.log('Starting notifications...');
+
+  if(characteristic != null)
+  {
+    return characteristic.startNotifications().
+      then(() => {
+        console.log('Notifications started');
+        characteristic.addEventListener('characteristicvaluechanged',
+            handleCharacteristicValueChanged);
+      }).
+      catch(error => {
+        console.log(error);
+      });
+  }
+}
+
 function disconnect() {
   if (deviceCache) {
+    console.log('Disconnecting from "' + deviceCache.name + '" bluetooth device...');
     deviceCache.removeEventListener('gattserverdisconnected',
         handleDisconnection);
     if (deviceCache.gatt.connected) {
       deviceCache.gatt.disconnect();
+      console.log('"' + deviceCache.name + '" bluetooth device disconnected');
+    } else {
+      console.log('"' + deviceCache.name +
+          '" bluetooth device is already disconnected');
     }
   }
   if (characteristicCache) {
@@ -125,7 +183,7 @@ for(var i = 0; i < 32; i++) {
     buttons[i] = false;
 }
 
-const keyCodes = ["X", 'Y', 'Z', '[', '\\', ']', '^', '_',
+const keyCodes = ['X', 'Y', 'Z', '[', '\\', ']', '^', '_',
                   '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
                   'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
                   'p', 'q', 'r', 's', 't', 'u', 'v', 'w'];
@@ -139,7 +197,7 @@ for(var i = 0; i < 32; i++){
           $(this).removeClass("lines-pressed");
           buttons[n] = false;
       }
-      writeToCharacteristic(characteristicCache, keyCodes[n]);
+      send(keyCodes[n]);
       console.log(characteristicCache);
   });
 }
