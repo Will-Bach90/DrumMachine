@@ -113,8 +113,12 @@ void updateControl() {
       }
     }
     if(Serial.available()){
-      if(Serial.readString().charAt(0) == '9') {
+      char inputChar = Serial.readString().charAt(0);
+      if(inputChar == '9') {
         playMode = 0;
+      } else if(inputChar == '1') {
+        resetFunction();
+      }
     }
   } else {
   // The char layout for the drum machine
@@ -144,8 +148,8 @@ void updateControl() {
       } else if(ch == '1') {
         resetFunction();
       } else if(ch == '9') {
-        resetFunction();
         playMode = 1;
+      }
     }
   } 
       
