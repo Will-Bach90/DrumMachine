@@ -31,6 +31,7 @@ uint16_t tempo = 260;
 int led_num = 2; // for turning on leds while going through
 byte lightsOn;
 byte loopPattern;
+byte playMode = 0;
 
 uint8_t keys[NUM_KEYS] = {
   0x14,0x24,0x34,0x44,0x54,0x64,0x74,0x84,  // Drum 4, beats 1,2,3,4,5,6,7,8
@@ -87,29 +88,35 @@ void updateControl() {
   // ledOff();
 
   // timing mechanism
-  unsigned long timenow = millis();
-  if (timenow >= nexttick) {                            // if current time exceeds time reuired for beat
-    nexttick = millis() + (unsigned long)(60000/tempo); // this beat should take (1 minute)/(set tempo) amount of time
-    step++; // increment step
-    if (step >= BEATS){ // if step has reached 8, restart at 0
-      step = 0;
-    }
-    digitalWrite(led_num, LOW);   // write led from last cycle to be low
-    led_num++;                    // increment led number (leds set on pins 2,3,4,5,6,7,8,10)
-    if(led_num == 9){
-      led_num++;
-    } else if(led_num > 10){
-      led_num = 2;
-    }
-    if(lightsOn>0) {
-      digitalWrite(led_num, HIGH);  // turn on led
-    }
-    for (int d = 0; d<DRUMS; d++) {   // for all the drums at the given step, if set to be on then play to audio
-      if (pattern[step][d] != 0) {
-        startDrum(pattern[step][d]);
+  if(playMode == 1) {
+    unsigned long timenow = millis();
+    if (timenow >= nexttick) {                            // if current time exceeds time reuired for beat
+      nexttick = millis() + (unsigned long)(60000/tempo); // this beat should take (1 minute)/(set tempo) amount of time
+      step++; // increment step
+      if (step >= BEATS){ // if step has reached 8, restart at 0
+        step = 0;
+      }
+//       digitalWrite(led_num, LOW);   // write led from last cycle to be low
+//       led_num++;                    // increment led number (leds set on pins 2,3,4,5,6,7,8,10)
+//       if(led_num == 9){
+//         led_num++;
+//       } else if(led_num > 10){
+//         led_num = 2;
+//       }
+//       if(lightsOn>0) {
+//         digitalWrite(led_num, HIGH);  // turn on led
+//       }
+      for (int d = 0; d<DRUMS; d++) {   // for all the drums at the given step, if set to be on then play to audio
+        if (pattern[step][d] != 0) {
+          startDrum(pattern[step][d]);
+        }
       }
     }
-  }
+    if(Serial.available()){
+      if(Serial.readString().charAt(0) == '9') {
+        playMode = 0;
+    }
+  } else {
   // The char layout for the drum machine
   /*
     |     (X)  (Y)  (Z)  ([)  (\)  (])  (^)  (_)    |
@@ -117,7 +124,6 @@ void updateControl() {
     |     (h)  (i)  (j)  (k)  (l)  (m)  (n)  (o)    |
     |     (p)  (q)  (r)  (s)  (t)  (u)  (v)  (w)    |
   */
-  if(loopPattern == 0) {
     if (Serial.available()) { 
       char ch = Serial.readString().charAt(0);
       Serial.println(ch); 
@@ -128,26 +134,22 @@ void updateControl() {
         int beat = (key >> 4) - 1;        // beat number (out of 8)
         if (pattern[beat][drum] != 0) {   // if beat is on, then turn off
           pattern[beat][drum] = 0;
-          if(lightsOn > 0){
-            lightsOn--;
-          } 
+//           if(lightsOn > 0){
+//             lightsOn--;
+//           } 
         } else { 
           pattern[beat][drum] = drums[drum]; // otherwise turn on (1-4 for the different drum types)
-          lightsOn++;
+//           lightsOn++;
         } 
       } else if(ch == '1') {
         resetFunction();
       }
     }
-  } else {
-    int newTempo = 50 + (mozziAnalogRead (tempoPotentiometer) >> 2);
-    if (newTempo != tempo) {
-        tempo = newTempo;  // Tempo range is 50 to 305.
-    }
-  }
-  loopPattern++;
-  if(loopPattern > 1){
-    loopPattern = 0;
+  } 
+      
+  int newTempo = 50 + (mozziAnalogRead (tempoPotentiometer) >> 2);
+  if (newTempo != tempo) {
+      tempo = newTempo;  // Tempo range is 50 to 305.
   }
 }
 
