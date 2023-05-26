@@ -143,7 +143,9 @@ void updateControl() {
         } 
       } else if(ch == '1') {
         resetFunction();
-      }
+      } else if(ch == '9') {
+        resetFunction();
+        playMode = 1;
     }
   } 
       
