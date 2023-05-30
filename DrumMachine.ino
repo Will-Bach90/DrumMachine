@@ -31,7 +31,7 @@ uint16_t tempo = 260;
 int led_num = 2; // for turning on leds while going through
 byte lightsOn;
 byte loopPattern;
-byte playMode = 0;
+byte playMode;
 
 uint8_t keys[NUM_KEYS] = {
   0x14,0x24,0x34,0x44,0x54,0x64,0x74,0x84,  // Drum 4, beats 1,2,3,4,5,6,7,8
@@ -116,6 +116,7 @@ void updateControl() {
       char inputChar = Serial.readString().charAt(0);
       if(inputChar == '9') {
         playMode = 0;
+        stopMozzi();
       } else if(inputChar == '1') {
         resetFunction();
       }
@@ -149,6 +150,7 @@ void updateControl() {
         resetFunction();
       } else if(ch == '9') {
         playMode = 1;
+        startMozzi();
       }
     }
   } 
