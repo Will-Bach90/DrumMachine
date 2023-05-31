@@ -3,8 +3,9 @@ const button = $(".connect");
 const serviceUUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const charUUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 let connected = false;
+let playing = false;
 
-button.on("mousedown", function() {
+button.on("click", function() {
   if(!connected) {
     connect();
   } else {
@@ -188,7 +189,7 @@ const keyCodes = ['X', 'Y', 'Z', '[', '\\', ']', '^', '_',
                   'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
                   'p', 'q', 'r', 's', 't', 'u', 'v', 'w'];
 for(var i = 0; i < 32; i++){
-    document.querySelectorAll(".lines")[i].addEventListener("mousedown", function() {
+    document.querySelectorAll(".lines")[i].addEventListener("click", function() {
       var n = parseInt($(this).attr("id")) - 1;
       if(!buttons[n]) {
           $(this).addClass("lines-pressed");
@@ -197,7 +198,21 @@ for(var i = 0; i < 32; i++){
           $(this).removeClass("lines-pressed");
           buttons[n] = false;
       }
-      send(keyCodes[n]);
-      console.log(characteristicCache);
+      setTimeout(function (){
+        send(keyCodes[n])
+      }, 100);
   });
 }
+
+document.querySelector(".play").addEventListener("click", function() {
+  if(!playing) {
+    $(this).addClass("play-pressed");
+    playing = true;
+  } else {
+    $(this).removeClass("play-pressed");
+    playing = false;
+  }
+  setTimeout(function (){
+    send('9')
+  }, 100);
+});
