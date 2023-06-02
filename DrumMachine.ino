@@ -28,8 +28,7 @@ uint8_t pattern[BEATS][DRUMS];
 unsigned long nexttick; // for keeping track of time during loop (tick until next step)
 int step; // step of the sequence out of 8
 uint16_t tempo = 260;
-int led_num = 2; // for turning on leds while going through
-byte lightsOn;
+// int led_num = 2; // for turning on leds while going through
 byte loopPattern;
 byte playMode;
 
@@ -48,45 +47,20 @@ void startDrum (int drum) {
     case OH: openHat.start(); break;
   }
 }
-
-// unsigned long millitime;
-// void ledOff () {
-//   if (millitime < millis()) {
-//      digitalWrite(LED_PIN, LOW);
-//   }
-// }
-
-// void ledOn () {
-//   millitime = millis() + LED_ON_TIME;
-//   digitalWrite(LED_PIN, HIGH);
-// }
+void(* resetFunction) (void) = 0; //declare reset function @ address 0
 
 void setup () {
   pinMode(tempoPotentiometer, INPUT);
-  // ledOff();
   startMozzi();
   bassDrum.setFreq((float) D_SAMPLERATE / (float) BD_NUM_CELLS);
   snareDrum.setFreq((float) D_SAMPLERATE / (float) SD_NUM_CELLS);
   closedHat.setFreq((float) D_SAMPLERATE / (float) CH_NUM_CELLS);
   openHat.setFreq((float) D_SAMPLERATE / (float) OH_NUM_CELLS);
-  pinMode(2, OUTPUT);
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(6, OUTPUT);
-  pinMode(7, OUTPUT);
-  pinMode(8, OUTPUT);
-  pinMode(10, OUTPUT); // Pin 9 is audio output
-  lightsOn = 0;
   loopPattern = 0; 
   Serial.begin(115200);  // uses serial to set pattern
 }
 
-void(* resetFunction) (void) = 0; //declare reset function @ address 0
-
 void updateControl() {
-  // ledOff();
-
   // timing mechanism
   if(playMode == 1) {
     unsigned long timenow = millis();
@@ -96,16 +70,6 @@ void updateControl() {
       if (step >= BEATS){ // if step has reached 8, restart at 0
         step = 0;
       }
-//       digitalWrite(led_num, LOW);   // write led from last cycle to be low
-//       led_num++;                    // increment led number (leds set on pins 2,3,4,5,6,7,8,10)
-//       if(led_num == 9){
-//         led_num++;
-//       } else if(led_num > 10){
-//         led_num = 2;
-//       }
-//       if(lightsOn>0) {
-//         digitalWrite(led_num, HIGH);  // turn on led
-//       }
       for (int d = 0; d<DRUMS; d++) {   // for all the drums at the given step, if set to be on then play to audio
         if (pattern[step][d] != 0) {
           startDrum(pattern[step][d]);
@@ -129,8 +93,8 @@ void updateControl() {
     |     (h)  (i)  (j)  (k)  (l)  (m)  (n)  (o)    |
     |     (p)  (q)  (r)  (s)  (t)  (u)  (v)  (w)    |
   */
-    if (Serial.available()) { 
-      char ch = Serial.readString().charAt(0);
+    while(Serial.available()) { 
+      char ch = Serial.read();
       Serial.println(ch); 
       if (ch >= 'X' && ch <= 'x') { 
         uint8_t charVal = ch - 'X';       // char provided in serial as index of keys array
@@ -139,12 +103,8 @@ void updateControl() {
         int beat = (key >> 4) - 1;        // beat number (out of 8)
         if (pattern[beat][drum] != 0) {   // if beat is on, then turn off
           pattern[beat][drum] = 0;
-//           if(lightsOn > 0){
-//             lightsOn--;
-//           } 
         } else { 
           pattern[beat][drum] = drums[drum]; // otherwise turn on (1-4 for the different drum types)
-//           lightsOn++;
         } 
       } else if(ch == '1') {
         resetFunction();
