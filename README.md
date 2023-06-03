@@ -12,9 +12,10 @@ Our project is a drum machine for playing various instruments at certain interva
 * 10kΩ Potentiometer
 * Various resistors ( 1x270Ω, 13x1kΩ, 32x2.2kΩ, 13x1MΩ) [5% tolerance]
 * 0.1 µF capacitor
+* JANSANE 16x2 1602 LCD Display Screen
 ***
 ## Alternative Setup (Web Application)
-Webpage ([here](https://will-bach90.github.io/427Final/)) used to control ESP32 module via bluetooth (ESP_BLEServer.ino), which then sends commands over serial to arduino uno to set beats and mode.
+Webpage ([here](https://will-bach90.github.io/427Final/)) built with Chrome Web BLE API, used to control ESP32 module via bluetooth (ESP_BLEServer.ino), which then sends commands over serial to arduino uno to set beats and mode.
 ![Webpage Setup](https://github.com/Will-Bach90/427Final/blob/main/IMG_0269.jpg)
 ## Parts
 * 8Ω 2W GF076 Speaker
