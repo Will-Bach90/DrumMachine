@@ -1,6 +1,6 @@
-# 427Final
+# Drum Machine
 ## Summary
-Our project is a drum machine for playing various instruments at certain intervals. Eight columns of buttons are used for controlling the timing of beats, and four rows of buttons are responsible for four instruments. There are two stages: program mode and play mode. During program mode, we set the timing and instruments. During play mode, the drum machine sweeps through at a set tempo using a potentiometer. The LEDs signify whether the beat should play or not during play mode.
+A a drum machine for playing various instruments at certain intervals. Eight columns of buttons are used for controlling the timing of beats, and four rows of buttons are responsible for four instruments. There are two stages: program mode and play mode. During program mode, we set the timing and instruments. During play mode, the drum machine sweeps through at a set tempo using a potentiometer. The LEDs signify whether the beat should play or not during play mode.
 ![Basic Setup](https://github.com/Will-Bach90/427Final/blob/main/IMG_0281.jpg)
 ## Parts
 * 8Ω 2W GF076 Speaker
