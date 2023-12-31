@@ -15,7 +15,7 @@ A a drum machine for playing various instruments at certain intervals. Eight col
 * JANSANE 16x2 1602 LCD Display Screen
 ***
 ## Alternative Setup (Web Application)
-Webpage ([here](https://will-bach90.github.io/427Final/)) built with Chrome Web BLE API, used to control ESP32 module via bluetooth (ESP_BLEServer.ino), which then sends commands over serial to arduino uno to set beats and mode.
+Webpage ([here](https://will-bach90.github.io/DrumMachine/)) built with Chrome Web BLE API, used to control ESP32 module via bluetooth (ESP_BLEServer.ino), which then sends commands over serial to arduino uno to set beats and mode.
 ![Webpage Setup](https://github.com/Will-Bach90/427Final/blob/main/IMG_0269.jpg)
 ## Parts
 * 8Ω 2W GF076 Speaker
